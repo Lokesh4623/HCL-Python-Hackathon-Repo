@@ -1,34 +1,10 @@
 # HCL-Python-Hackathon-Repo
 HCL - Python Hackathon Task Repository
 
-**Flow Diagram:**
+**API Flow:**
 
-User (Client)
-    │
-    │ 1. Request JWT with PAN
-    ▼
-FastAPI Server (/generate-token)
-    │
-    │ 2. Validate PAN
-    │    └─ If valid → Generate JWT
-    │    └─ If invalid → Return error
-    ▼
-JWT Token sent to User
-    │
-    │ 3. Send account creation request with JWT
-    ▼
-FastAPI Server (/pan/{pan_number}/create-account)
-    │
-    │ 4. Verify JWT
-    │    └─ If valid → Validate PAN & Deposit → Create Account
-    │    └─ If invalid → Return error
-    ▼
-Success Message:
-"Your Savings/FD/Current account created successfully with account number XXX"
-    │
-    │ 5. Optional: Fetch accounts with JWT
-    ▼
-FastAPI Server (/pan/{pan_number}/accounts)
-    │
-    ▼
-List of User Accounts returned
+1. User → Request JWT (/generate-token) → FastAPI validates PAN → Returns JWT → 
+2. User → Create Account (/pan/{pan_number}/create-account) with JWT → 
+    FastAPI verifies JWT & PAN → Validates deposit → Creates Account → Returns Success Message → 
+3. User → Fetch Accounts (/pan/{pan_number}/accounts) with JWT → FastAPI returns Account List
+
