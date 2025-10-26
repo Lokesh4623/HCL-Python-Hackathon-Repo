@@ -5,16 +5,7 @@ HCL - Python Hackathon Task Repository
 
 The application follows a layered design:
 
-Client (Postman/Browser)
-       |
-       v
-FastAPI API Layer
-       |
-       v
-Business Logic & Security
-       |
-       v
-PostgreSQL Database
+Client (Postman/Browser) ---> FastAPI API Layer ---> Business Logic & Security  ---> PostgreSQL Database
 
 Client: Sends HTTP requests (register, login, create account).
 
