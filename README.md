@@ -135,3 +135,33 @@ All account-related endpoints require a JWT token generated via /generate-token.
 JWT should be sent in the Authorization header as a Bearer token:
 
 _Authorization: Bearer <jwt_token>_
+
+**JWT Generation**
+
+1.Server receives user data (e.g., PAN).
+
+2.Validate user exists in database.
+
+3.Create a payload with data, datetime and expiry.
+
+4.Generate JWT using:
+token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
+5.Return the JWT to the client.
+
+**JWT Validation**
+
+1.Client sends JWT in Authorization: Bearer <token> header.
+
+2.Server extracts token (token = authorization[7:]).
+
+3.Decode and verify token using:
+payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+
+4.Check for validity:
+
+  Signature matches SECRET_KEY, Algorithm matches "HS256", Token not expired
+
+5.Use payload data (e.g., PAN) for authorization.
+
+6.If invalid or expired → return 401 Unauthorized.
