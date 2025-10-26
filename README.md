@@ -104,7 +104,7 @@ FD: 10000
 
 **3. Get Accounts**
 
-GET /accounts
+POST /accounts
 
 Headers
 
