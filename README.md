@@ -21,7 +21,7 @@ Database: Stores users and accounts persistently.
 
 **Users Table**
 
-Column	Type	Description
+_Column	Type	Description_
 
 id	int	Primary key
 
@@ -32,7 +32,7 @@ hashed_password	str	Bcrypt-hashed password
 
 **Accounts Table**
 
-Column	Type	Description
+_Column	Type	Description_
 
 id	int	Primary key
 
@@ -81,7 +81,7 @@ Save account in PostgreSQL linked to the authenticated user.
 
 **5. API Endpoints**
 
-Endpoint	       Method	  Description
+_Endpoint	       Method	  Description_
 
 /register	       POST	    Register new user, returns JWT
 
