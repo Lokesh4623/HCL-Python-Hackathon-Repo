@@ -69,6 +69,7 @@ Save account in PostgreSQL linked to the authenticated user.
 ----------------------------------------------------------------------------------------------------------------------------------
 
 **5. API Endpoints**
+
 Endpoint	       Method	  Description
 
 /register	       POST	    Register new user, returns JWT
