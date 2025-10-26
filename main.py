@@ -73,7 +73,7 @@ def create_account_endpoint(
 # -------------------
 # Get Accounts Endpoint (PAN in payload)
 # -------------------
-@app.get("/accounts")
+@app.post("/accounts")
 def get_accounts(
     data: AllAccountRequest,
     authorization: str = Header(...),
