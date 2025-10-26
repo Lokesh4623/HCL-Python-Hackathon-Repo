@@ -8,7 +8,7 @@ def create_jwt(pan_number: str) -> str:
     payload = {
         "pan_number": pan_number,
         "iat": datetime.utcnow(),
-        "exp": datetime.utcnow() + timedelta(minutes=2),
+        "exp": datetime.utcnow() + timedelta(minutes=10),
         "token_id": str(datetime.utcnow().timestamp())
     }
     token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")

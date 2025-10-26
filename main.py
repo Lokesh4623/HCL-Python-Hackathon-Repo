@@ -60,10 +60,10 @@ def create_account_endpoint(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Validate initial deposit
+    # Validate Account Type and initial deposit
     min_dep = MIN_DEPOSIT.get(data.account_type)
     if min_dep is None:
-        raise HTTPException(status_code=400, detail="Invalid account type")
+        raise HTTPException(status_code=400, detail="Invalid account type! Account type must be Savings, Current, or FD")
     if data.initial_deposit < min_dep:
         raise HTTPException(status_code=400, detail=f"Minimum deposit for {data.account_type} is {min_dep}")
 
