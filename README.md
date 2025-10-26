@@ -7,7 +7,7 @@ The application follows a layered design:
 
 Client (Postman/Browser) ---> FastAPI API Layer ---> Business Logic & Security  ---> PostgreSQL Database
 
-Client: Sends HTTP requests (register, login, create account).
+Client: Sends HTTP requests (register, login, create account, view accounts).
 
 API Layer: Handles routing, validation, and authentication.
 
