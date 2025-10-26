@@ -1,95 +1,167 @@
 # HCL-Python-Hackathon-Repo
 HCL - Python Hackathon Task Repository
 
-**1. Architecture**
+**PAN-Based Account Creation API with JWT**
 
-The application follows a layered design:
+This API allows users to generate JWT tokens based on their PAN, create different types of bank accounts (Savings, Current, FD), and retrieve account details. All account-related endpoints require JWT-based authorization.
 
-Client (Postman/Browser) ---> FastAPI API Layer ---> Business Logic & Security  ---> PostgreSQL Database
+**PAN Format Validation**
 
-Client: Sends HTTP requests (register, login, create account, view accounts).
+PAN must match the regex: ^[A-Z]{5}[0-9]{4}[A-Z]{1}$
 
-API Layer: Handles routing, validation, and authentication.
+Example of valid PAN: ABCDE1234F
 
-Business Logic & Security: Validates inputs, hashes passwords, generates unique account numbers, enforces rules.
+**Account Types**
 
-Database: Stores users and accounts persistently.
+| Type    | Minimum Deposit |
+| ------- | --------------- |
+| Savings | 1000            |
+| Current | 5000            |
+| FD      | 10000           |
 
-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
-**2. Database Design**
+**Endpoints**
 
-**Users Table**
+**1. Generate JWT Token**
 
-_Column	Type	Description_
+POST /generate-token
 
-id	int	Primary key
+Request Body (JSON)
 
-username	str	Unique login
+{
+  "pan_number": "ABCDE1234F"
+}
 
-hashed_password	str	Bcrypt-hashed password
+Responses
+
+200 OK
+{
+  "jwt": "<generated_token>"
+}
+
+400 Bad Request – Invalid PAN format
+
+404 Not Found – PAN not registered
+-----------------------------------------------------------------------------------------
+
+**2. Create Account**
+
+POST /pan/{pan_number}/create-account
+
+Headers
+
+Authorization: Bearer <jwt_token>
 
 
-**Accounts Table**
+Path Parameter
 
-_Column	Type	Description_
+pan_number – PAN of the user (validated via regex)
 
-id	int	Primary key
+Request Body (JSON)
 
-account_number	str	Unique account number with type prefix
-
-customer_name	str	Account holder name
-
-account_type	str	Savings / Current / FD
-
-balance	float	Initial deposit
-
-user_id	int	Foreign key linking account to user
+{
+  "account_type": "Savings",
+  "initial_deposit": 2000
+}
 
 
-----------------------------------------------------------------------------------------------------------------------------------
+Responses
 
-**3. Security**
+200 OK
 
-Password Hashing: bcrypt via Passlib ensures passwords are stored securely.
+{
+  "message": "Your Savings account created successfully with the account number 1234567890"
+}
 
-JWT Authentication: Users receive a token after login/registration to access protected endpoints.
 
-Protected Routes: Account creation and listing require a valid JWT.
+400 Bad Request – Invalid PAN, invalid account type, or deposit below minimum
 
-----------------------------------------------------------------------------------------------------------------------------------
+401 Unauthorized – Missing or malformed Bearer token
 
-**4. Account Creation Logic**
+403 Forbidden – Token PAN does not match path PAN
 
-Validate input fields (name, type, deposit).
+404 Not Found – PAN not registered
 
-Enforce minimum deposit per account type:
+-----------------------------------------------------------------------------------------
 
-Savings: ₹1000
+**3. Get Accounts for PAN**
 
-Current: ₹5000
+GET /pan/{pan_number}/accounts
 
-FD: ₹10000
+Headers
 
-Generate a unique 12-character account number with type prefix:
+Authorization: Bearer <jwt_token>
 
-SAV → Savings, CUR → Current, FD → Fixed Deposit
 
-Save account in PostgreSQL linked to the authenticated user.
+Path Parameter
 
-----------------------------------------------------------------------------------------------------------------------------------
+pan_number – PAN of the user (validated via regex)
 
-**5. API Endpoints**
+Responses
 
-_Endpoint	       Method	  Description_
+200 OK
 
-/register	       POST	    Register new user, returns JWT
+[
+  {
+    "account_number": "1234567890",
+    "account_type": "Savings",
+    "balance": 2000
+  },
+  {
+    "account_number": "1234567891",
+    "account_type": "FD",
+    "balance": 15000
+  }
+]
 
-/token	         POST	    User login, returns JWT
 
-/create-account	 POST	    Create a new account (JWT required)
 
-/accounts	       GET	    List all accounts of the authenticated user
 
-----------------------------------------------------------------------------------------------------------------------------------
+400 Bad Request – Invalid PAN format
 
+401 Unauthorized – Missing or malformed Bearer token
+
+403 Forbidden – Token PAN does not match path PAN
+
+404 Not Found – PAN not registered
+
+-----------------------------------------------------------------------------------------
+
+**Authentication**
+
+All account-related endpoints require a JWT token generated via /generate-token.
+
+JWT should be sent in the Authorization header as a Bearer token:
+
+_Authorization: Bearer <jwt_token>_
+
+**JWT Generation**
+
+1.Server receives user data (e.g., PAN).
+
+2.Validate user exists in database.
+
+3.Create a payload with data, datetime and expiry.
+
+4.Generate JWT using:
+token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
+5.Return the JWT to the client.
+
+**JWT Validation**
+
+1.Client sends JWT in Authorization: Bearer <token> header.
+
+2.Server extracts token (token = authorization[7:]).
+
+3.Decode and verify token using:
+payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+
+4.Check for validity:
+
+  Signature matches SECRET_KEY, Algorithm matches "HS256", Token not expired
+
+5.Use payload data (e.g., PAN) for authorization.
+
+6.If invalid or expired → return 401 Unauthorized.
