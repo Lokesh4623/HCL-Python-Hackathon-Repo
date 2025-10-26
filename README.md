@@ -21,6 +21,7 @@ Example of valid PAN: ABCDE1234F
 
 
 **Endpoints**
+
 **1. Generate JWT Token**
 
 POST /generate-token
@@ -42,7 +43,7 @@ Responses
 
 404 Not Found – PAN not registered
 
-2. Create Account
+**2. Create Account**
 
 POST /pan/{pan_number}/create-account
 
@@ -80,7 +81,7 @@ Responses
 
 404 Not Found – PAN not registered
 
-3. Get Accounts for PAN
+**3. Get Accounts for PAN**
 
 GET /pan/{pan_number}/accounts
 
