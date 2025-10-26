@@ -19,6 +19,7 @@ Example of valid PAN: ABCDE1234F
 | Current | 5000            |
 | FD      | 10000           |
 
+-----------------------------------------------------------------------------------------
 
 **Endpoints**
 
@@ -42,6 +43,7 @@ Responses
 400 Bad Request – Invalid PAN format
 
 404 Not Found – PAN not registered
+-----------------------------------------------------------------------------------------
 
 **2. Create Account**
 
@@ -80,6 +82,8 @@ Responses
 403 Forbidden – Token PAN does not match path PAN
 
 404 Not Found – PAN not registered
+
+-----------------------------------------------------------------------------------------
 
 **3. Get Accounts for PAN**
 
@@ -121,6 +125,8 @@ Responses
 403 Forbidden – Token PAN does not match path PAN
 
 404 Not Found – PAN not registered
+
+-----------------------------------------------------------------------------------------
 
 **Authentication**
 
