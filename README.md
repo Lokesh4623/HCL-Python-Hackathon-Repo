@@ -165,3 +165,36 @@ payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
 5.Use payload data (e.g., PAN) for authorization.
 
 6.If invalid or expired → return 401 Unauthorized.
+
+-----------------------------------------------------------------------------------------
+
+**Database Design:**
+
+**1. Users Table (Existing)**
+
+| Column     | Type         | Constraints                 | Description      |
+| ---------- | ------------ | --------------------------- | ---------------- |
+| id         | INTEGER      | PRIMARY KEY, AUTO INCREMENT | Internal user ID |
+| pan_number | VARCHAR(10)  | UNIQUE, NOT NULL            | PAN number       |
+| name       | VARCHAR(100) | NULLABLE                    | User full name   |
+
+**Assumption: This table is already preloaded.**
+
+**2.Accounts Table (New)**
+
+| Column         | Type        | Constraints                 | Description                                        |
+| -------------- | ----------- | --------------------------- | -------------------------------------------------- |
+| id             | INTEGER     | PRIMARY KEY, AUTO INCREMENT | Internal account ID                                |
+| account_number | VARCHAR(12) | UNIQUE, NOT NULL            | Account number (prefix + 12-digit padded sequence) |
+| account_type   | VARCHAR(20) | NOT NULL                    | Type: Savings / Current / FD                       |
+| balance        | FLOAT       | NOT NULL                    | Current account balance                            |
+| user_id        | INTEGER     | FOREIGN KEY → users(id)     | Owner of the account                               |
+| created_at     | TIMESTAMP   | DEFAULT CURRENT_TIMESTAMP   | Account creation timestamp                         |
+
+
+**3. Relationships**
+
+User → Account = 1-to-many
+
+Account → User = many-to-1
+
