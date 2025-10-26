@@ -76,7 +76,7 @@ Responses
   "message": "Your Savings account created successfully with the account number SAV000000001"
 }
 
-Validation Rules:
+**Validation Rules:**
 
 PAN must match the format: 5 letters + 4 digits + 1 letter (^[A-Z]{5}[0-9]{4}[A-Z]{1}$)
 
@@ -90,7 +90,7 @@ Current: 5000
 
 FD: 10000
 
-Errors:
+**Errors:**
 
 400 Bad Request → Invalid PAN or invalid account type or insufficient initial deposit
 
@@ -134,11 +134,11 @@ Response:
   }
 ]
 
-Validation Rules:
+**Validation Rules:**
 
 PAN must match the format: 5 letters + 4 digits + 1 letter
 
-Errors:
+**Errors:**
 
 400 Bad Request → Invalid PAN format
 
