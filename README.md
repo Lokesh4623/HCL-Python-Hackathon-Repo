@@ -22,19 +22,30 @@ Database: Stores users and accounts persistently.
 **Users Table**
 
 Column	Type	Description
+
 id	int	Primary key
+
 username	str	Unique login
+
 hashed_password	str	Bcrypt-hashed password
+
 
 **Accounts Table**
 
 Column	Type	Description
+
 id	int	Primary key
+
 account_number	str	Unique account number with type prefix
+
 customer_name	str	Account holder name
+
 account_type	str	Savings / Current / FD
+
 balance	float	Initial deposit
+
 user_id	int	Foreign key linking account to user
+
 
 ----------------------------------------------------------------------------------------------------------------------------------
 
