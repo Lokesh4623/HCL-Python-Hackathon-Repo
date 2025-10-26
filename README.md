@@ -69,11 +69,11 @@ Save account in PostgreSQL linked to the authenticated user.
 ----------------------------------------------------------------------------------------------------------------------------------
 
 **5. API Endpoints**
-Endpoint	Method	Description
-/register	POST	Register new user, returns JWT
-/token	POST	User login, returns JWT
-/create-account	POST	Create a new account (JWT required)
-/accounts	GET	List all accounts of the authenticated user
+Endpoint	       Method	  Description
+/register	       POST	    Register new user, returns JWT
+/token	         POST	    User login, returns JWT
+/create-account	 POST	    Create a new account (JWT required)
+/accounts	       GET	    List all accounts of the authenticated user
 
 ----------------------------------------------------------------------------------------------------------------------------------
 
