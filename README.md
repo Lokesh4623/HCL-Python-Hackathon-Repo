@@ -40,27 +40,29 @@ Responses
   "jwt": "<generated_token>"
 }
 
-400 Bad Request – Invalid PAN format
+Errors:
 
-404 Not Found – PAN not registered
+400 Bad Request → Invalid PAN format
+
+404 Not Found → User not found
+
 -----------------------------------------------------------------------------------------
 
 **2. Create Account**
 
-POST /pan/{pan_number}/create-account
+POST /accounts/create
+
+Description:
+Creates a new account (Savings, Current, or FD) for a user. Requires JWT authentication.
 
 Headers
 
 Authorization: Bearer <jwt_token>
 
-
-Path Parameter
-
-pan_number – PAN of the user (validated via regex)
-
 Request Body (JSON)
 
 {
+  "pan_number": "ABCDE1234F",
   "account_type": "Savings",
   "initial_deposit": 2000
 }
@@ -71,60 +73,80 @@ Responses
 200 OK
 
 {
-  "message": "Your Savings account created successfully with the account number 1234567890"
+  "message": "Your Savings account created successfully with the account number SAV000000001"
 }
 
+Validation Rules:
 
-400 Bad Request – Invalid PAN, invalid account type, or deposit below minimum
+PAN must match the format: 5 letters + 4 digits + 1 letter (^[A-Z]{5}[0-9]{4}[A-Z]{1}$)
 
-401 Unauthorized – Missing or malformed Bearer token
+Account type must be one of: "Savings", "Current", "FD"
 
-403 Forbidden – Token PAN does not match path PAN
+Minimum deposits:
 
-404 Not Found – PAN not registered
+Savings: 1000
+
+Current: 5000
+
+FD: 10000
+
+Errors:
+
+400 Bad Request → Invalid PAN or invalid account type or insufficient initial deposit
+
+401 Unauthorized → Missing/invalid JWT token
+
+403 Forbidden → JWT does not match PAN
+
+404 Not Found → User not found
 
 -----------------------------------------------------------------------------------------
 
-**3. Get Accounts for PAN**
+**3. Get Accounts**
 
-GET /pan/{pan_number}/accounts
+GET /accounts
 
 Headers
 
 Authorization: Bearer <jwt_token>
 
+Request Body:
 
-Path Parameter
+{
+  "pan_number": "ABCDE1234F"
+}
 
-pan_number – PAN of the user (validated via regex)
 
-Responses
+Response:
 
 200 OK
 
 [
   {
-    "account_number": "1234567890",
+    "account_number": "SAV000000001",
     "account_type": "Savings",
     "balance": 2000
   },
   {
-    "account_number": "1234567891",
-    "account_type": "FD",
-    "balance": 15000
+    "account_number": "CUR000000002",
+    "account_type": "Current",
+    "balance": 5000
   }
 ]
 
+Validation Rules:
 
+PAN must match the format: 5 letters + 4 digits + 1 letter
 
+Errors:
 
-400 Bad Request – Invalid PAN format
+400 Bad Request → Invalid PAN format
 
-401 Unauthorized – Missing or malformed Bearer token
+401 Unauthorized → Missing/invalid JWT token
 
-403 Forbidden – Token PAN does not match path PAN
+403 Forbidden → JWT does not match PAN
 
-404 Not Found – PAN not registered
+404 Not Found → User not found
 
 -----------------------------------------------------------------------------------------
 
